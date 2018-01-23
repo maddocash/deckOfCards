@@ -1,36 +1,64 @@
-// generate deck
 const deckContainer = document.getElementById('deckContainer');
 let deck = [];
+let myCards = [];
 
-const generateDeck = () => {
+const generateDeck = selection => {
   deck = [];
   const suits = ['clubs', 'spades', 'hearts', 'diamonds'];
   const ranks = ['A', 'K', 'Q', 'J', 10, 9, 8, 7, 6, 5, 4, 3, 2];
   let docFrag = document.createDocumentFragment();
 
-  for (var s = 0; s < suits.length; s++) {
-    for (var n = 0; n < ranks.length; n++) {
-      deck.push(`${ranks[n]} ${suits[s]}`);
+  for (let s = 0; s < suits.length; s++) {
+    for (let n = 0; n < ranks.length; n++) {
+      deck.push({name: `${ranks[n]} ${suits[s]}`});
     }
   }
-  return displaydeck();
+  deck.map((itm, idx) => (itm.value = idx));
+  return displaydeck(selection);
 };
 
-const shuffleDeck = () => {
+const shuffleDeck = selection => {
   deck = shuffle(deck);
-  displaydeck();
+  displaydeck(selection);
 };
 
-const displaydeck = () => {
+const displaydeck = selection => {
   deckContainer.innerHTML = '';
-  for (var i = 0; i < deck.length; i++) {
-    var card = document.createElement('div');
-    card.appendChild(document.createTextNode(deck[i]));
-    card.setAttribute('id', `card ${i}`);
+  let array = selection === 'all' ? deck : myCards;
+
+  for (let c = 0; c < array.length; c++) {
+    let drawnCard = document.createElement('div');
+    drawnCard.innerHTML = 'pick me';
+    drawnCard.setAttribute('onclick', `chosenCards(${c})`);
+    drawnCard.setAttribute('class', 'btns');
+
+    let card = document.createElement('div');
+    card.appendChild(document.createTextNode(array[c].name));
+    card.appendChild(drawnCard);
+    card.setAttribute('id', `card ${c}`);
     card.setAttribute('class', `card`);
+
     deckContainer.appendChild(card);
   }
   return;
+};
+
+const reset = () => {
+  myCards = [];
+};
+
+const chosenCards = card => {
+  document.getElementById(`card ${card}`).setAttribute('class', ' card style1');
+  return (myCards = [...myCards, deck[card]]);
+};
+
+const sort = () => {
+  myCards.sort((a, b) => {
+    if (a.value < b.value) return -1;
+    if (a.value > b.value) return 1;
+    return 0;
+  });
+  displaydeck('some');
 };
 
 const shuffle = array => {
