@@ -5,10 +5,6 @@
   justify-content: center;
 }
 
-.style1 {
-  background-color: rgb(255, 108, 93);
-}
-
 .card {
   width: 10%;
   height: 10vh;
@@ -20,6 +16,10 @@
   box-shadow: 1px 2px 1px 1px #000;
   background-color: #fafad2;
   margin: 1%;
+}
+
+.picked {
+  background-color: rgb(255, 108, 93);
 }
 
 .btns {

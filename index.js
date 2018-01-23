@@ -2,6 +2,16 @@ const deckContainer = document.getElementById('deckContainer');
 let deck = [];
 let myCards = [];
 
+const initalDeck = selection => {
+  generateDeck();
+  return displaydeck(selection);
+};
+
+const displaySorted = selection => {
+  sort(myCards);
+  displaydeck(selection);
+};
+
 const generateDeck = selection => {
   deck = [];
   const suits = ['clubs', 'spades', 'hearts', 'diamonds'];
@@ -13,8 +23,9 @@ const generateDeck = selection => {
       deck.push({name: `${ranks[n]} ${suits[s]}`});
     }
   }
+
   deck.map((itm, idx) => (itm.value = idx));
-  return displaydeck(selection);
+  return deck;
 };
 
 const shuffleDeck = selection => {
@@ -29,8 +40,8 @@ const displaydeck = selection => {
   for (let c = 0; c < array.length; c++) {
     let drawnCard = document.createElement('div');
     drawnCard.innerHTML = 'pick me';
-    drawnCard.setAttribute('onclick', `chosenCards(${c})`);
     drawnCard.setAttribute('class', 'btns');
+    drawnCard.setAttribute('onclick', `chosenCards(${c})`);
 
     let card = document.createElement('div');
     card.appendChild(document.createTextNode(array[c].name));
@@ -44,21 +55,21 @@ const displaydeck = selection => {
 };
 
 const reset = () => {
-  myCards = [];
+  return (myCards = []);
 };
 
 const chosenCards = card => {
-  document.getElementById(`card ${card}`).setAttribute('class', ' card style1');
+  document.getElementById(`card ${card}`).setAttribute('class', 'card picked');
   return (myCards = [...myCards, deck[card]]);
 };
 
-const sort = () => {
-  myCards.sort((a, b) => {
+const sort = deck => {
+  deck.sort((a, b) => {
     if (a.value < b.value) return -1;
     if (a.value > b.value) return 1;
     return 0;
   });
-  displaydeck('some');
+  return deck;
 };
 
 const shuffle = array => {
@@ -76,4 +87,10 @@ const shuffle = array => {
   }
 
   return array;
+};
+
+module.exports = {
+  generateDeck,
+  reset,
+  sort
 };
